@@ -8,6 +8,7 @@ struct descF *cria()
     {
         desc->cauda = NULL;
         desc->frente = NULL;
+        desc->refMovel = NULL;
         desc->tamInfo = sizeof(info);
     }
     return desc;
@@ -23,7 +24,7 @@ int insereNaFila(info *novo, struct descF *fila)
         if (fila->frente == NULL && fila->cauda == NULL)   /*fila vazia*/
         {
             novoNoFila->atras = novoNoFila->defronte = NULL;
-            fila->frente = fila->cauda = novoNoFila;
+            fila->frente = fila->cauda = fila->refMovel = novoNoFila;
         }
         else
         {
@@ -93,6 +94,7 @@ int reinicia(struct descF *fila)
         free(fila->cauda);
         fila->frente = NULL;
         fila->cauda = NULL;
+        fila->refMovel = NULL;
         status = 1;
     }
     return status;
@@ -199,7 +201,7 @@ int retiraDaFila(info *ele, struct descF *fila)
         if (aux1 == fila->frente)
         { // caso tenha 1 elemento apenas
             free(fila->frente);
-            fila->frente = fila->cauda = NULL;
+            fila->frente = fila->cauda = fila->refMovel = NULL;
         }
         else
         {
@@ -210,7 +212,7 @@ int retiraDaFila(info *ele, struct descF *fila)
 
                 auxi1 = rEle->atras;
                 rEle->atras->defronte = rEle->defronte;
-                rEle->defronte->atras = auxi1;
+                rEle->defronte->atras = fila->refMovel = auxi1;
                 free(rEle);
                 free(auxi1);
                 free(ele);
@@ -223,7 +225,8 @@ int retiraDaFila(info *ele, struct descF *fila)
 
                 auxi1 = rEle->atras;
                 rEle->atras->defronte = rEle->defronte;
-                rEle->defronte->atras = auxi1;
+                rEle->defronte->atras = fila->refMovel = auxi1;
+
                 free(rEle);
                 free(auxi1);
                 free(ele);
@@ -236,7 +239,8 @@ int retiraDaFila(info *ele, struct descF *fila)
 
                 auxi1 = rEle->atras;
                 rEle->atras->defronte = rEle->defronte;
-                rEle->defronte->atras = auxi1;
+                rEle->defronte->atras = fila->refMovel = auxi1;
+
                 free(rEle);
                 free(auxi1);
                 free(ele);
