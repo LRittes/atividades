@@ -2,7 +2,6 @@ package dados;
 
 import java.util.List;
 
-import java.util.LinkedList;
 import java.util.Random;
 
 public class CalculadoraEstatistica implements ISequencia {
@@ -74,7 +73,7 @@ public class CalculadoraEstatistica implements ISequencia {
     }
 
     @Override
-    public double desvioPadra() {
+    public double desvioPadrao() {
         return Math.sqrt(variancia());
     }
 

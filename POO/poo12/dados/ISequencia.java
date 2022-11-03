@@ -11,7 +11,7 @@ interface ISequencia {
 
     public double variancia();
 
-    public double desvioPadra();
+    public double desvioPadrao();
 
     public long amplitude();
 }

@@ -7,7 +7,7 @@ import dados.CalculadoraEstatistica;
 public class TabelaResultados extends AbstractTableModel {
     private CalculadoraEstatistica calculadora = CalculadoraEstatistica.getInstance();
 
-    private String[] colunas = { " Sorteado ", " Somatorio ", "Media Geomtrica ", " Variancia ", " Desvio P a d r o ",
+    private String[] colunas = { " Sorteado ", " Somatorio ", "Media Geomtrica ", " Variancia ", " Desvio Padrao ",
             " Amplitude " };
 
     public String getColumnName(int column) {
@@ -39,7 +39,7 @@ public class TabelaResultados extends AbstractTableModel {
                 case 4:
                     return calculadora.variancia();
                 case 5:
-                    return calculadora.desvioPadra();
+                    return calculadora.desvioPadrao();
                 case 6:
                     return calculadora.amplitude();
             }
