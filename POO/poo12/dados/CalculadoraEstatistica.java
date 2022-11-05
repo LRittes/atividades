@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 public class CalculadoraEstatistica implements ISequencia {
+    private Gerador geradores[] = new Gerador[] { new Fibonacci(), new Naturais(), new Fatoriais() };
     private List<Integer> sequencia;
     private static CalculadoraEstatistica instance = null;
 
@@ -57,6 +58,23 @@ public class CalculadoraEstatistica implements ISequencia {
         return produto;
     }
 
+    public void gerar(GerarTipo tipo, int n) {
+        switch (tipo) {
+            case FIBONACCI:
+                geradores[0].gerar(n);
+                this.sequencia.addAll(geradores[0].getSequencia());
+                break;
+            case NATURAL:
+                geradores[1].gerar(n);
+                this.sequencia.addAll(geradores[1].getSequencia());
+                break;
+            case FATORIAL:
+                geradores[2].gerar(n);
+                this.sequencia.addAll(geradores[2].getSequencia());
+                break;
+        }
+    }
+
     @Override
     public double mediaGeometrica() {
         return Math.pow(mediaAritmetica(), 1.0 / (double) (sequencia.size()));
@@ -95,6 +113,12 @@ public class CalculadoraEstatistica implements ISequencia {
     @Override
     public double mediaAritmetica() {
         return somatorio() / (double) (sequencia.size());
+    }
+
+    public void remove() {
+        if (sequencia.size() > 0) {
+            sequencia.remove(sequencia.size() - 1);
+        }
     }
 
 }
