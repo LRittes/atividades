@@ -1,10 +1,23 @@
+#define LIVRE 0
+#define OCUPADA 1
+#define FRACASSO 0
+#define SUCESSO 1
+#define FALSO 0
+#define VERDADEIRO 1
+#define NAO 0
+#define SIM 1
+#define MAIOR 1
+#define IGUAL 0
+#define MENOR -1
+#include "stdlib.h"
+#include "stdio.h"
 #include "string.h"
 
-typedef struct info
+typedef struct
 {
 	int idade;
 	char nome[30];
-} info;
+}info;
 
 struct noFila
 {
@@ -23,22 +36,22 @@ struct descF
 
 struct descF *cria();
 
-int insereNaFila(info *, struct descF *);
+int insereNaFila(info *novo, struct descF *fila);
 
-int tamanhoDaFila(struct descF *);
+int tamanhoDaFila(struct descF *fila);
 
-int reinicia(struct descF *);
+int reinicia(struct descF *fila);
 
-struct descF *destroi(struct descF *);
+struct descF *destroi(struct descF *fila);
 
-int buscaNaCauda(info *, struct descF *);
+int buscaNaCauda(info *ele, struct descF *fila);
 
-int buscaNaFrente(info *, struct descF *);
+int buscaNaFrente(info *ele, struct descF *fila);
 
-int buscaNoRefMovel(info *, struct descF *);
+int buscaNoRefMovel(info *ele, struct descF *fila);
 
-int retiraDaFila(info *, struct descF *);
+int retiraDaFila(info *ele, struct descF *fila);
 
-int testaVazia(struct descF *);
+int testaVazia(struct descF *fila);
 
-int inverte(struct descF *);
+int inverte(struct descF *fila);

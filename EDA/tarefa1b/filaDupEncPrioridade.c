@@ -16,7 +16,7 @@ struct descF *cria()
 
 int insereNaFila(info *novo, struct descF *fila)
 {
-    int result;
+    int result = FRACASSO;
     struct noFila *novoNoFila = NULL, *visitado = NULL;
     if ((novoNoFila = (struct noFila *)malloc(sizeof(struct noFila))) != NULL)
     {
@@ -47,6 +47,7 @@ int insereNaFila(info *novo, struct descF *fila)
                 }
                 visitado->defronte = novoNoFila;
                 novoNoFila->atras = visitado;
+                fila->refMovel = novoNoFila;
             }
             else
             { // novo item é o de menor prioridade de todos na fila, sendo a nova cauda
@@ -56,10 +57,10 @@ int insereNaFila(info *novo, struct descF *fila)
                 fila->cauda = novoNoFila;
             }
         }
-        return 1;
+        return SUCESSO;
     }
 
-    return 0;
+    return FRACASSO;
 };
 
 int tamanhoDaFila(struct descF *fila)
@@ -109,145 +110,203 @@ struct descF *destroi(struct descF *fila)
 
 int buscaNaCauda(info *ele, struct descF *fila)
 {
-    int pos = 0;
+    int ret = FRACASSO;
 
     if (fila->cauda != NULL && fila->frente != NULL)
     {
-        struct noFila *aux = fila->cauda;
-        for (int i = 0; i < tamanhoDaFila(fila); i++)
-        {
-            if (ele->idade == aux->dados.idade && strcmp(aux->dados.nome, ele->nome) == 0)
-            {
-                memcpy(ele, &(aux->dados), fila->tamInfo);
-                break;
-            }
-            aux = fila->cauda->defronte;
-            pos++;
-        }
+        memcpy(ele, &(fila->cauda->dados), fila->tamInfo);
+        ret = SUCESSO;
     }
 
-    return pos;
+    return ret;
 };
 
 int buscaNaFrente(info *ele, struct descF *fila)
 {
-    int pos = 0;
+    int ret = FRACASSO;
 
-    if (fila->cauda != NULL && fila->frente != NULL)
+    if (fila->frente != NULL && fila->cauda != NULL)
     {
-        struct noFila *aux = fila->frente;
-        for (int i = 0; i < tamanhoDaFila(fila); i++)
-        {
-            if (ele->idade == aux->dados.idade && strcmp(aux->dados.nome, ele->nome) == 0)
-            {
-                memcpy(ele, &(aux->dados), fila->tamInfo);
-                break;
-            }
-            aux = fila->frente->atras;
-            pos++;
-        }
+        memcpy(ele, &(fila->frente->dados), fila->tamInfo);
+        ret = SUCESSO;
     }
 
-    return pos;
+    return ret;
 };
 
 int buscaNoRefMovel(info *ele, struct descF *fila)
 {
-    struct noFila *aux1 = fila->cauda, *aux2 = fila->frente, *aux3 = fila->refMovel;
-    int nC = aux1->dados.idade, nF = aux2->dados.idade, nRM = aux3->dados.idade;
-    nC = (nC - ele->idade) < 0 ? (nC - ele->idade) * (-1) : (nC - ele->idade);
-    nF = (nF - ele->idade) < 0 ? (nF - ele->idade) * (-1) : (nF - ele->idade);
-    nRM = (nRM - ele->idade) < 0 ? (nRM - ele->idade) * (-1) : (nRM - ele->idade);
+    int ret = FRACASSO;
 
-    int pos;
     if (fila->cauda != NULL && fila->frente != NULL)
     {
-        struct noFila *aux = fila->refMovel;
-        if (nF <= nC)
-        {
-
-            while (ele->idade != aux->dados.idade && strcmp(aux->dados.nome, ele->nome) != 0)
-            {
-                aux = aux->defronte;
-            }
-            memcpy(ele, &(aux->dados), fila->tamInfo);
-            pos = buscaNaFrente(ele, fila);
-        }
-        else
-        {
-            while (ele->idade != aux->dados.idade && strcmp(aux->dados.nome, ele->nome) != 0)
-            {
-                aux = aux->atras;
-            }
-            memcpy(ele, &(aux->dados), fila->tamInfo);
-            pos = buscaNaCauda(ele, fila);
-        }
+        memcpy(ele, &(fila->refMovel->dados), fila->tamInfo);
+        ret = SUCESSO;
     }
-    return pos;
+
+    return ret;
 };
 
 int retiraDaFila(info *ele, struct descF *fila)
 {
-    int status = 0;
-    struct noFila *aux1 = fila->cauda, *aux2 = fila->frente, *aux3 = fila->refMovel;
+    int status = FRACASSO;
+    struct noFila *cauda = fila->cauda, *frente = fila->frente, *ref = fila->refMovel;
 
     if (fila->cauda != NULL && fila->frente != NULL)
     {
-        int nC = aux1->dados.idade, nF = aux2->dados.idade, nRM = aux3->dados.idade;
+        int nC = cauda->dados.idade, nF = frente->dados.idade, nRM = ref->dados.idade;
         nC = (nC - ele->idade) < 0 ? (nC - ele->idade) * (-1) : (nC - ele->idade);
         nF = (nF - ele->idade) < 0 ? (nF - ele->idade) * (-1) : (nF - ele->idade);
         nRM = (nRM - ele->idade) < 0 ? (nRM - ele->idade) * (-1) : (nRM - ele->idade);
 
-        if (aux1 == fila->frente)
+        if (cauda == fila->frente)
         { // caso tenha 1 elemento apenas
             free(fila->frente);
             fila->frente = fila->cauda = fila->refMovel = NULL;
         }
         else
         {
+
+            // O elemento a ser removido está mais perto da cauda
             if (nC <= nRM && nC <= nF)
             {
-                struct noFila *auxi1, *rEle;
-                int pos = buscaNaCauda(rEle, fila);
+                printf("Perto Cauda\n");
+                struct noFila *aux = fila->cauda, *rEle = NULL;
 
-                auxi1 = rEle->atras;
-                rEle->atras->defronte = rEle->defronte;
-                rEle->defronte->atras = fila->refMovel = auxi1;
+                while (aux->dados.idade <= ele->idade && aux != NULL)
+                {
+                    if (aux->dados.idade == ele->idade && strcmp(aux->dados.nome, ele->nome) == 0)
+                    {
+                        rEle = aux;
+                        break;
+                    }
+                    aux = aux->defronte;
+                }
+
+                if (rEle == NULL)
+                    return FRACASSO;
+
+                aux = rEle->defronte;
+                if (rEle == fila->cauda)
+                {
+                    fila->cauda = aux;
+                    rEle->defronte->atras = NULL;
+                }
+                else
+                {
+                    rEle->defronte->atras = rEle->atras;
+                }
+                rEle->defronte->atras = fila->refMovel = aux;
                 free(rEle);
-                free(auxi1);
-                free(ele);
-                rEle = auxi1 = ele = NULL;
             }
-            else if (nRM <= nF && nRM <= nC)
-            {
-                struct noFila *auxi1, *rEle;
-                int pos = buscaNoRefMovel(rEle, fila);
 
-                auxi1 = rEle->atras;
-                rEle->atras->defronte = rEle->defronte;
-                rEle->defronte->atras = fila->refMovel = auxi1;
-
-                free(rEle);
-                free(auxi1);
-                free(ele);
-                rEle = auxi1 = ele = NULL;
-            }
+            // O elemento a ser removido está mais perto da frente
             else if (nF <= nC && nF <= nRM)
             {
-                struct noFila *auxi1, *rEle;
-                int pos = buscaNaFrente(rEle, fila);
+                printf("Perto frente\n");
+                struct noFila *auxi1 = fila->frente, *rEle = NULL;
+
+                while (auxi1->dados.idade >= ele->idade && auxi1 != NULL)
+                {
+                    if (auxi1->dados.idade == ele->idade && strcmp(auxi1->dados.nome, ele->nome) == 0)
+                    {
+                        rEle = auxi1;
+                        break;
+                    }
+                    auxi1 = auxi1->atras;
+                }
+
+                if (rEle == NULL)
+                    return FRACASSO;
 
                 auxi1 = rEle->atras;
-                rEle->atras->defronte = rEle->defronte;
-                rEle->defronte->atras = fila->refMovel = auxi1;
+                if (rEle == fila->frente)
+                {
+                    fila->frente = auxi1;
+                    rEle = fila->frente->defronte = NULL;
+                    fila->refMovel = fila->frente->atras != NULL ? fila->frente->atras : fila->frente;
+                }
+                else
+                {
+                    rEle->atras->defronte = rEle->defronte;
+                    rEle->defronte->atras = fila->refMovel = auxi1;
+                    rEle = NULL;
+                }
+                free(rEle);
+            }
+
+            // O elemento a ser removido está mais perto do referencial
+            else if (nRM <= nF && nRM <= nC)
+            {
+                printf("Perto Referencial\n");
+                struct noFila *auxi1 = fila->refMovel, *rEle = NULL;
+                // if (ele->idade == ref->dados.idade)
+                //     return FRACASSO;
+                // Elementos está a frente do referencial
+                if (ref->dados.idade <= ele->idade)
+                {
+
+                    while (auxi1->dados.idade <= ele->idade && auxi1 != NULL)
+                    {
+                        if (auxi1->dados.idade == ele->idade && strcmp(auxi1->dados.nome, ele->nome) == 0)
+                        {
+                            rEle = auxi1;
+                            break;
+                        }
+                        auxi1 = auxi1->defronte;
+                    }
+
+                    auxi1 = rEle->atras;
+                    if (rEle->defronte == fila->frente)
+                    {
+                        fila->frente = auxi1;
+                        fila->frente->atras = fila->refMovel = auxi1;
+                        rEle = NULL;
+                    }
+                    else
+                    {
+                        rEle->atras->defronte = rEle->defronte;
+
+                        rEle->defronte->atras = fila->refMovel = auxi1;
+                    }
+                }
+                else
+                {
+                    while (auxi1->dados.idade >= ele->idade && auxi1 != NULL)
+                    {
+                        if (auxi1->dados.idade == ele->idade && strcmp(auxi1->dados.nome, ele->nome) == 0)
+                        {
+                            rEle = auxi1;
+                            break;
+                        }
+                        auxi1 = auxi1->atras;
+                    }
+
+                    auxi1 = rEle->atras;
+                    if (rEle == fila->frente)
+                    {
+                        fila->frente = auxi1;
+                        rEle->atras->defronte = NULL;
+                        fila->frente->atras = fila->refMovel = auxi1;
+                    }
+                    else if (rEle == fila->cauda)
+                    {
+                        rEle->atras->defronte = rEle->defronte;
+
+                        rEle->defronte->atras = fila->refMovel = auxi1;
+                    }
+                    else
+                    {
+                    }
+                }
+
+                if (rEle == NULL)
+                    return FRACASSO;
 
                 free(rEle);
-                free(auxi1);
-                free(ele);
-                rEle = auxi1 = ele = NULL;
             }
         }
-        status = 1;
+        status = SUCESSO;
     }
 
     return status;
