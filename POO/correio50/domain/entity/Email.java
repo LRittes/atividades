@@ -53,6 +53,7 @@ public class Email {
         this.author = author;
         this.receiver = receiver;
         this.message = message;
+        this.subject = subject;
     }
 
 }

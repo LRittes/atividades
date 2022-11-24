@@ -55,18 +55,22 @@ public class Sistema {
 
     private User user;
 
-    public User getUser() {
-        return user;
+    public User getUser() throws Exception {
+        try {
+
+            return findUser.findUser(user.getEmail());
+        } catch (Exception e) {
+            throw new Exception(e);
+        }
     }
 
-    public User login(String email, String password) throws Exception {
+    public void login(String email, String password) throws Exception {
         List<Email> list = new ArrayList<>();
 
         user = new User("", password, email, list);
         try {
 
             user = loginUser.login(user);
-            return user;
         } catch (Exception e) {
             throw new Exception(e);
         }

@@ -22,6 +22,7 @@ import view.controller.Sistema;
 
 import java.awt.CardLayout;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.BoxLayout;
 import javax.swing.JTextArea;
 import java.awt.GridLayout;
@@ -160,71 +161,6 @@ public class App extends JFrame {
 		viewRoute.add(inboxPage, "name_888002535061");
 		inboxPage.setLayout(null);
 
-		JPanel emailCardInboxPage = new JPanel();
-		emailCardInboxPage.setBounds(12, 12, 373, 43);
-		emailCardInboxPage.setBackground(new Color(203, 203, 203));
-		inboxPage.add(emailCardInboxPage);
-		emailCardInboxPage.setLayout(null);
-
-		JLabel lblUserNameInboxPage = new JLabel("userName");
-		lblUserNameInboxPage.setBounds(12, 12, 72, 15);
-		emailCardInboxPage.add(lblUserNameInboxPage);
-
-		JLabel lblSubjectInboxPage = new JLabel("Subject");
-		lblSubjectInboxPage.setBounds(142, 12, 70, 15);
-		emailCardInboxPage.add(lblSubjectInboxPage);
-
-		JButton btnDel = new JButton("del");
-		btnDel.setForeground(new Color(243, 243, 243));
-		btnDel.setBackground(new Color(249, 107, 107));
-		btnDel.setMargin(new Insets(2, 2, 2, 2));
-		btnDel.setFont(new Font("Dialog", Font.PLAIN, 8));
-		btnDel.setBounds(320, 8, 25, 25);
-		emailCardInboxPage.add(btnDel);
-
-		JButton btnShowEmail = new JButton("ver");
-		btnShowEmail.setFont(new Font("Dialog", Font.BOLD, 8));
-		btnShowEmail.setBackground(new Color(138, 226, 52));
-		btnShowEmail.setForeground(new Color(255, 255, 255));
-		btnShowEmail.setBounds(272, 8, 46, 25);
-		emailCardInboxPage.add(btnShowEmail);
-
-		JPanel responderEmailPage = new JPanel();
-		responderEmailPage.setLayout(null);
-		viewRoute.add(responderEmailPage, "name_1682630940146");
-
-		JPanel emailFieldDe = new JPanel();
-		emailFieldDe.setLayout(null);
-		emailFieldDe.setBackground(Color.WHITE);
-		emailFieldDe.setBounds(12, 12, 371, 49);
-		responderEmailPage.add(emailFieldDe);
-
-		JPanel subjectFieldOneEmail = new JPanel();
-		subjectFieldOneEmail.setLayout(null);
-		subjectFieldOneEmail.setBackground(Color.WHITE);
-		subjectFieldOneEmail.setBounds(12, 73, 371, 49);
-		responderEmailPage.add(subjectFieldOneEmail);
-
-		JLabel lblAssuntoOneEmail = new JLabel("Assunto:");
-		lblAssuntoOneEmail.setBounds(12, 18, 73, 15);
-		subjectFieldOneEmail.add(lblAssuntoOneEmail);
-
-		textFieldOneEmail = new JTextField();
-		textFieldOneEmail.setForeground(Color.WHITE);
-		textFieldOneEmail.setColumns(10);
-		textFieldOneEmail.setBounds(81, 12, 273, 27);
-		subjectFieldOneEmail.add(textFieldOneEmail);
-
-		JTextArea textAreaOneEmail = new JTextArea();
-		textAreaOneEmail.setBounds(12, 134, 371, 209);
-		responderEmailPage.add(textAreaOneEmail);
-
-		JButton btnResponderEmail = new JButton("Responder Email");
-		btnResponderEmail.setForeground(Color.WHITE);
-		btnResponderEmail.setBackground(new Color(94, 195, 60));
-		btnResponderEmail.setBounds(182, 355, 201, 25);
-		responderEmailPage.add(btnResponderEmail);
-
 		JButton btnExitButton = new JButton("Sair");
 		btnExitButton.setForeground(new Color(255, 255, 255));
 		btnExitButton.setFont(new Font("Dialog", Font.BOLD, 8));
@@ -326,6 +262,8 @@ public class App extends JFrame {
 		passwordFieldRegister.setBounds(138, 230, 314, 25);
 		registerPage.add(passwordFieldRegister);
 
+		JButton btnResponderEmail = new JButton("Responder Email");
+
 		// Ação Botão Entrar no Login Page
 		btnEntrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -337,6 +275,28 @@ public class App extends JFrame {
 				try {
 					controller.register("", password, email);
 					controller.login(email, password);
+
+					try {
+						Email em1 = new Email(1, controller.getUser().getEmail(), controller.getUser().getEmail(),
+								"test1",
+								"test1");
+						Email em2 = new Email(2, controller.getUser().getEmail(), controller.getUser().getEmail(),
+								"test2",
+								"test2");
+						Email em3 = new Email(3, controller.getUser().getEmail(), controller.getUser().getEmail(),
+								"test3",
+								"test3");
+						Email em4 = new Email(4, controller.getUser().getEmail(), controller.getUser().getEmail(),
+								"test4",
+								"test4");
+						controller.enviarEmail(em1);
+						controller.enviarEmail(em2);
+						controller.enviarEmail(em3);
+						controller.enviarEmail(em4);
+					} catch (Exception er) {
+						er.printStackTrace();
+					}
+
 					if (!controller.getUser().equals(null)) {
 						mainRoute.removeAll();
 						mainRoute.repaint();
@@ -420,35 +380,129 @@ public class App extends JFrame {
 		// Ação Botão Caixa de entrada
 		btnInbox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				try {
+
+					int i = 0;
+					for (Email email : controller.getUser().getEmails()) {
+
+						JPanel responderEmailPage = new JPanel();
+						responderEmailPage.setLayout(null);
+						viewRoute.add(responderEmailPage, "name_1682630940146");
+
+						JPanel emailFieldDe = new JPanel();
+						emailFieldDe.setLayout(null);
+						emailFieldDe.setBackground(Color.WHITE);
+						emailFieldDe.setBounds(12, 12, 371, 49);
+						responderEmailPage.add(emailFieldDe);
+
+						JPanel subjectFieldOneEmail = new JPanel();
+						subjectFieldOneEmail.setLayout(null);
+						subjectFieldOneEmail.setBackground(Color.WHITE);
+						subjectFieldOneEmail.setBounds(12, 73, 371, 49);
+						responderEmailPage.add(subjectFieldOneEmail);
+
+						JLabel lblAssuntoOneEmail = new JLabel("Assunto:");
+						lblAssuntoOneEmail.setBounds(12, 18, 73, 15);
+						subjectFieldOneEmail.add(lblAssuntoOneEmail);
+
+						textFieldOneEmail = new JTextField();
+						textFieldOneEmail.setForeground(Color.WHITE);
+						textFieldOneEmail.setColumns(10);
+						textFieldOneEmail.setBounds(81, 12, 273, 27);
+						subjectFieldOneEmail.add(textFieldOneEmail);
+
+						btnResponderEmail.setForeground(Color.WHITE);
+						btnResponderEmail.setBackground(new Color(94, 195, 60));
+						btnResponderEmail.setBounds(182, 355, 201, 25);
+						responderEmailPage.add(btnResponderEmail);
+
+						JPanel emailCardInboxPage = new JPanel();
+						emailCardInboxPage.setBounds(12, 12 + i * 53, 373, 43);
+						emailCardInboxPage.setBackground(new Color(203, 203, 203));
+						inboxPage.add(emailCardInboxPage);
+						emailCardInboxPage.setLayout(null);
+
+						JLabel lblUserNameInboxPage = new JLabel(email.getMessage());
+						lblUserNameInboxPage.setBounds(12, 12, 72, 15);
+						emailCardInboxPage.add(lblUserNameInboxPage);
+
+						JLabel lblDe = new JLabel("De: " + email.getAuthor());
+						lblDe.setBounds(12, 18, 347, 15);
+						emailFieldDe.add(lblDe);
+
+						JLabel lblSubjectInboxPage = new JLabel(email.getSubject());
+						System.out.println(email.getSubject());
+						lblSubjectInboxPage.setBounds(142, 12, 70, 15);
+						emailCardInboxPage.add(lblSubjectInboxPage);
+
+						JButton btnDel = new JButton("del");
+						btnDel.setForeground(new Color(243, 243, 243));
+						btnDel.setBackground(new Color(249, 107, 107));
+						btnDel.setMargin(new Insets(2, 2, 2, 2));
+						btnDel.setFont(new Font("Dialog", Font.PLAIN, 8));
+						btnDel.setBounds(320, 8, 25, 25);
+						emailCardInboxPage.add(btnDel);
+
+						JButton btnShowEmail = new JButton("ver");
+						btnShowEmail.setFont(new Font("Dialog", Font.BOLD, 8));
+						btnShowEmail.setBackground(new Color(138, 226, 52));
+						btnShowEmail.setForeground(new Color(255, 255, 255));
+						btnShowEmail.setBounds(272, 8, 46, 25);
+						emailCardInboxPage.add(btnShowEmail);
+
+						JTextPane txtpnAEmailReceived = new JTextPane();
+						txtpnAEmailReceived.setText(email.getMessage());
+						txtpnAEmailReceived.setBounds(12, 134, 371, 209);
+						responderEmailPage.add(txtpnAEmailReceived);
+
+						// Ação Botão Ver em Caixa de entrada
+						btnShowEmail.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent e) {
+
+								viewRoute.removeAll();
+								viewRoute.repaint();
+								viewRoute.revalidate();
+								viewRoute.add(responderEmailPage);
+								viewRoute.repaint();
+								viewRoute.revalidate();
+							}
+						});
+
+						// Ação Botão Del em Caixa de entrada
+						btnDel.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent e) {
+								try {
+
+									controller.excluirEmail(email.getId());
+									controller.login(controller.getUser().getEmail(),
+											controller.getUser().getPassword());
+									System.out.println(controller.getUser().getEmails());
+
+									viewRoute.removeAll();
+									viewRoute.repaint();
+									viewRoute.revalidate();
+									viewRoute.add(inboxPage);
+									viewRoute.repaint();
+									viewRoute.revalidate();
+								} catch (Exception err) {
+									err.printStackTrace();
+								}
+
+							}
+						});
+						i++;
+					}
+				} catch (Exception err) {
+					err.printStackTrace();
+
+				}
+
 				viewRoute.removeAll();
 				viewRoute.repaint();
 				viewRoute.revalidate();
 				viewRoute.add(inboxPage);
 				viewRoute.repaint();
 				viewRoute.revalidate();
-			}
-		});
-
-		// Ação Botão Ver em Caixa de entrada
-		btnShowEmail.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JLabel lblDe = new JLabel("De:  ( Author)");
-				lblDe.setBounds(12, 18, 347, 15);
-				emailFieldDe.add(lblDe);
-
-				viewRoute.removeAll();
-				viewRoute.repaint();
-				viewRoute.revalidate();
-				viewRoute.add(responderEmailPage);
-				viewRoute.repaint();
-				viewRoute.revalidate();
-			}
-		});
-
-		// Ação Botão Del em Caixa de entrada
-		btnShowEmail.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
 			}
 		});
 
@@ -490,9 +544,8 @@ public class App extends JFrame {
 
 				if (receiver != "") {
 
-					Email email = new Email(1, controller.getUser().getEmail(), receiver, subject, menssage);
-
 					try {
+						Email email = new Email(1, controller.getUser().getEmail(), receiver, subject, menssage);
 						controller.enviarEmail(email);
 					} catch (Exception err) {
 						err.printStackTrace();
