@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import java.awt.Color;
 import java.awt.event.ActionListener;
@@ -142,7 +143,7 @@ public class App extends JFrame {
 		subjectFieldNewEmail.add(lblAssunto);
 
 		textFieldSubjectNewEmail = new JTextField();
-		textFieldSubjectNewEmail.setForeground(Color.WHITE);
+		textFieldSubjectNewEmail.setForeground(new Color(0, 0, 0));
 		textFieldSubjectNewEmail.setColumns(10);
 		textFieldSubjectNewEmail.setBounds(81, 12, 273, 27);
 		subjectFieldNewEmail.add(textFieldSubjectNewEmail);
@@ -277,16 +278,20 @@ public class App extends JFrame {
 					controller.login(email, password);
 
 					try {
-						Email em1 = new Email(1, controller.getUser().getEmail(), controller.getUser().getEmail(),
+						Email em1 = new Email(1, controller.getUser().getEmail(),
+								controller.getUser().getEmail(),
 								"test1",
 								"test1");
-						Email em2 = new Email(2, controller.getUser().getEmail(), controller.getUser().getEmail(),
+						Email em2 = new Email(2, controller.getUser().getEmail(),
+								controller.getUser().getEmail(),
 								"test2",
 								"test2");
-						Email em3 = new Email(3, controller.getUser().getEmail(), controller.getUser().getEmail(),
+						Email em3 = new Email(3, controller.getUser().getEmail(),
+								controller.getUser().getEmail(),
 								"test3",
 								"test3");
-						Email em4 = new Email(4, controller.getUser().getEmail(), controller.getUser().getEmail(),
+						Email em4 = new Email(4, controller.getUser().getEmail(),
+								controller.getUser().getEmail(),
 								"test4",
 								"test4");
 						controller.enviarEmail(em1);
@@ -307,6 +312,9 @@ public class App extends JFrame {
 					}
 
 				} catch (Exception err) {
+
+					JOptionPane.showMessageDialog(null, "Usuário inválido!");
+
 					err.printStackTrace();
 
 				}
@@ -337,18 +345,23 @@ public class App extends JFrame {
 				textFieldEmailRegister.setText("");
 				passwordFieldRegister.setText("");
 
-				try {
-					controller.register(userName, password, email);
+				if (email.contains("@")) {
+					try {
+						controller.register(userName, password, email);
 
-					mainRoute.removeAll();
-					mainRoute.repaint();
-					mainRoute.revalidate();
-					mainRoute.add(loginPage);
-					mainRoute.repaint();
-					mainRoute.revalidate();
-				} catch (Exception err) {
-					System.out.println(err);
+						mainRoute.removeAll();
+						mainRoute.repaint();
+						mainRoute.revalidate();
+						mainRoute.add(loginPage);
+						mainRoute.repaint();
+						mainRoute.revalidate();
+					} catch (Exception err) {
+						System.out.println(err);
+					}
+				} else {
+					JOptionPane.showMessageDialog(null, "Email inválido!");
 				}
+
 			}
 		});
 
@@ -541,16 +554,17 @@ public class App extends JFrame {
 				textFieldSubjectNewEmail.setText("");
 				textAreaNewEmail.setText("");
 				textFieldNewEmailTo.setText("");
+				System.out.println(receiver);
 
-				if (receiver != "") {
-
-					try {
-						Email email = new Email(1, controller.getUser().getEmail(), receiver, subject, menssage);
-						controller.enviarEmail(email);
-					} catch (Exception err) {
-						err.printStackTrace();
-					}
+				try {
+					Email email = new Email(1, controller.getUser().getEmail(), receiver, menssage, subject);
+					controller.enviarEmail(email);
+				} catch (Exception err) {
+					System.out.println("entrou");
+					JOptionPane.showMessageDialog(null, "Não há destinatário!");
+					// err.printStackTrace();
 				}
+
 			}
 		});
 	}
