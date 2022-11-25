@@ -31,7 +31,7 @@ public class DB {
         int id = 0;
         int index = 0;
         for (Map<String, Object> user : db) {
-            if (user.get("email") == userID) {
+            if (user.get("email").equals(userID)) {
                 id = index;
                 break;
             }

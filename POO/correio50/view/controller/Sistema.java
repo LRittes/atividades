@@ -2,6 +2,7 @@ package view.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import data.dataSource.interfaceDB.UserDB;
 import data.dataSource.local.UserDBImp;
@@ -106,7 +107,9 @@ public class Sistema {
         return user.getEmails();
     }
 
-    public void enviarEmail(Email email) {
+    public void enviarEmail(String receiverEmail, String message, String subject) {
+        UUID uuid = UUID.randomUUID();
+        Email email = new Email(uuid.toString(), user.getEmail(), receiverEmail, message, subject);
         try {
             sendEmail.sendEmail(email);
         } catch (Exception e) {
@@ -114,7 +117,7 @@ public class Sistema {
         }
     }
 
-    public void excluirEmail(int id) throws Exception {
+    public void excluirEmail(String id) throws Exception {
         try {
             deleteEmail.deleteEmail(id, user);
         } catch (Exception e) {
@@ -123,7 +126,8 @@ public class Sistema {
     }
 
     public void responderEmail(String receiverEmail, String message, String subject) {
-        Email email = new Email(32, user.getEmail(), receiverEmail, message, subject);
+        UUID uuid = UUID.randomUUID();
+        Email email = new Email(uuid.toString(), user.getEmail(), receiverEmail, message, subject);
         try {
             answerEmail.answerEmail(email);
 

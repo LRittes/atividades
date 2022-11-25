@@ -11,7 +11,7 @@ public class DeleteEmailImp implements DeleteEmail {
     }
 
     @Override
-    public void deleteEmail(int id, User user) throws Exception {
+    public void deleteEmail(String id, User user) throws Exception {
         _repository.deleteEmail(id, user);
     }
 

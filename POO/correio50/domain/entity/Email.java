@@ -1,7 +1,7 @@
 package domain.entity;
 
 public class Email {
-    private int id;
+    private String id;
     private String author;
     private String receiver;
     private String message;
@@ -27,11 +27,11 @@ public class Email {
         this.author = author;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -48,7 +48,7 @@ public class Email {
         this.message = message;
     }
 
-    public Email(int id, String author, String receiver, String message, String subject) {
+    public Email(String id, String author, String receiver, String message, String subject) {
         this.id = id;
         this.author = author;
         this.receiver = receiver;

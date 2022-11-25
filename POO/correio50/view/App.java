@@ -40,7 +40,7 @@ public class App extends JFrame {
 	private JTextField textFieldSubjectNewEmail;
 	private JTextField textFieldEmailLogin;
 	private JTextField textFieldEmailRegister;
-	private JTextField textFieldOneEmail;
+	// private JTextField textFieldOneEmail;
 	private JPasswordField passwordFieldLogin;
 	private JPasswordField passwordFieldRegister;
 
@@ -263,8 +263,6 @@ public class App extends JFrame {
 		passwordFieldRegister.setBounds(138, 230, 314, 25);
 		registerPage.add(passwordFieldRegister);
 
-		JButton btnResponderEmail = new JButton("Responder Email");
-
 		// Ação Botão Entrar no Login Page
 		btnEntrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -274,33 +272,7 @@ public class App extends JFrame {
 				passwordFieldLogin.setText("");
 
 				try {
-					controller.register("", password, email);
 					controller.login(email, password);
-
-					try {
-						Email em1 = new Email(1, controller.getUser().getEmail(),
-								controller.getUser().getEmail(),
-								"test1",
-								"test1");
-						Email em2 = new Email(2, controller.getUser().getEmail(),
-								controller.getUser().getEmail(),
-								"test2",
-								"test2");
-						Email em3 = new Email(3, controller.getUser().getEmail(),
-								controller.getUser().getEmail(),
-								"test3",
-								"test3");
-						Email em4 = new Email(4, controller.getUser().getEmail(),
-								controller.getUser().getEmail(),
-								"test4",
-								"test4");
-						controller.enviarEmail(em1);
-						controller.enviarEmail(em2);
-						controller.enviarEmail(em3);
-						controller.enviarEmail(em4);
-					} catch (Exception er) {
-						er.printStackTrace();
-					}
 
 					if (!controller.getUser().equals(null)) {
 						mainRoute.removeAll();
@@ -315,7 +287,7 @@ public class App extends JFrame {
 
 					JOptionPane.showMessageDialog(null, "Usuário inválido!");
 
-					err.printStackTrace();
+					// err.printStackTrace();
 
 				}
 
@@ -411,6 +383,7 @@ public class App extends JFrame {
 						JPanel subjectFieldOneEmail = new JPanel();
 						subjectFieldOneEmail.setLayout(null);
 						subjectFieldOneEmail.setBackground(Color.WHITE);
+						subjectFieldOneEmail.setForeground(new Color(0, 0, 0));
 						subjectFieldOneEmail.setBounds(12, 73, 371, 49);
 						responderEmailPage.add(subjectFieldOneEmail);
 
@@ -418,12 +391,14 @@ public class App extends JFrame {
 						lblAssuntoOneEmail.setBounds(12, 18, 73, 15);
 						subjectFieldOneEmail.add(lblAssuntoOneEmail);
 
-						textFieldOneEmail = new JTextField();
-						textFieldOneEmail.setForeground(Color.WHITE);
-						textFieldOneEmail.setColumns(10);
+						JLabel textFieldOneEmail = new JLabel(email.getSubject());
+						// textFieldOneEmail = new JTextField();
+						textFieldOneEmail.setForeground(new Color(0, 0, 0));
+						// textFieldOneEmail.setColumns(10);
 						textFieldOneEmail.setBounds(81, 12, 273, 27);
 						subjectFieldOneEmail.add(textFieldOneEmail);
 
+						JButton btnResponderEmail = new JButton("Responder Email");
 						btnResponderEmail.setForeground(Color.WHITE);
 						btnResponderEmail.setBackground(new Color(94, 195, 60));
 						btnResponderEmail.setBounds(182, 355, 201, 25);
@@ -444,7 +419,6 @@ public class App extends JFrame {
 						emailFieldDe.add(lblDe);
 
 						JLabel lblSubjectInboxPage = new JLabel(email.getSubject());
-						System.out.println(email.getSubject());
 						lblSubjectInboxPage.setBounds(142, 12, 70, 15);
 						emailCardInboxPage.add(lblSubjectInboxPage);
 
@@ -489,18 +463,29 @@ public class App extends JFrame {
 									controller.excluirEmail(email.getId());
 									controller.login(controller.getUser().getEmail(),
 											controller.getUser().getPassword());
-									System.out.println(controller.getUser().getEmails());
 
-									viewRoute.removeAll();
-									viewRoute.repaint();
-									viewRoute.revalidate();
-									viewRoute.add(inboxPage);
-									viewRoute.repaint();
-									viewRoute.revalidate();
+									inboxPage.removeAll();
+									inboxPage.repaint();
+									inboxPage.revalidate();
+									btnInbox.doClick();
+
 								} catch (Exception err) {
 									err.printStackTrace();
 								}
 
+							}
+						});
+
+						// Ação Botão Responder Email em Caixa de entrada
+						btnResponderEmail.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent e) {
+
+								viewRoute.removeAll();
+								viewRoute.repaint();
+								viewRoute.revalidate();
+								viewRoute.add(newEmailPage);
+								viewRoute.repaint();
+								viewRoute.revalidate();
 							}
 						});
 						i++;
@@ -514,19 +499,6 @@ public class App extends JFrame {
 				viewRoute.repaint();
 				viewRoute.revalidate();
 				viewRoute.add(inboxPage);
-				viewRoute.repaint();
-				viewRoute.revalidate();
-			}
-		});
-
-		// Ação Botão Responder Email em Caixa de entrada
-		btnResponderEmail.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				viewRoute.removeAll();
-				viewRoute.repaint();
-				viewRoute.revalidate();
-				viewRoute.add(newEmailPage);
 				viewRoute.repaint();
 				viewRoute.revalidate();
 			}
@@ -554,13 +526,11 @@ public class App extends JFrame {
 				textFieldSubjectNewEmail.setText("");
 				textAreaNewEmail.setText("");
 				textFieldNewEmailTo.setText("");
-				System.out.println(receiver);
 
 				try {
-					Email email = new Email(1, controller.getUser().getEmail(), receiver, menssage, subject);
-					controller.enviarEmail(email);
+
+					controller.enviarEmail(receiver, menssage, subject);
 				} catch (Exception err) {
-					System.out.println("entrou");
 					JOptionPane.showMessageDialog(null, "Não há destinatário!");
 					// err.printStackTrace();
 				}

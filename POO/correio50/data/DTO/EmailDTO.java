@@ -11,9 +11,9 @@ public class EmailDTO {
     }
 
     public static Email fromJson(Map<String, Object> email) {
-        int id = Integer.parseInt(email.get("id").toString());
 
-        Email emailRet = new Email(id, email.get("author").toString(), email.get("receiver").toString(),
+        Email emailRet = new Email(email.get("id").toString(), email.get("author").toString(),
+                email.get("receiver").toString(),
                 email.get("message").toString(), email.get("subject").toString());
 
         return emailRet;

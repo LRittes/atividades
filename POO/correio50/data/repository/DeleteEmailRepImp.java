@@ -16,7 +16,7 @@ public class DeleteEmailRepImp implements DeleteEmailRep {
         this._db = db;
     }
 
-    public void deleteEmail(int idEmail, User user) throws Exception {
+    public void deleteEmail(String idEmail, User user) throws Exception {
         User userAux;
         try {
             userAux = UserDTO.fromJson(_db.getUserByEmail(user.getEmail()));
@@ -27,7 +27,7 @@ public class DeleteEmailRepImp implements DeleteEmailRep {
         List<Email> emailsAux = new ArrayList<>();
 
         for (Email email : userAux.getEmails()) {
-            if (email.getId() != idEmail) {
+            if (!email.getId().equals(idEmail)) {
                 emailsAux.add(email);
             }
         }
