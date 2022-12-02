@@ -4,20 +4,20 @@
 #include "ListaColi.h"
 
 /*************** CRIA ***************/
-DescLC *criaListaLC(int tamInfo)
+DescLC *criaListaLC(int tamInfoLC)
 {
 	DescLC *desc = (DescLC *)malloc(sizeof(DescLC));
 
 	if (desc != NULL)
 	{
 		desc->inicio = NULL;
-		desc->tamInfo = tamInfo;
+		desc->tamInfo = tamInfoLC;
 	}
 	return desc;
 }
 
 /*************** insere novo primeiro ***************/
-int insereNovoPrimeiroC(Info *reg, DescLC *p)
+int insereNovoPrimeiroC(InfoLC *reg, DescLC *p)
 {
 	NoLC *temp;
 	int ret = FRACASSO;
@@ -36,7 +36,7 @@ int insereNovoPrimeiroC(Info *reg, DescLC *p)
 }
 
 /*************** insere novo ultimo ***************/
-int insereNovoUltimoC(Info *reg, DescLC *p)
+int insereNovoUltimoC(InfoLC *reg, DescLC *p)
 {
 	int ret = FRACASSO;
 	NoLC *aux = NULL, *temp = NULL;
@@ -67,26 +67,43 @@ int insereNovoUltimoC(Info *reg, DescLC *p)
 }
 
 /*************** INSERE NA posLog alvo ***************/
-int insereNaPoslogC(int posLog, Info *novo, DescLC *p)
+int insereNaPoslogC(int posLog, InfoLC *novo, DescLC *p)
 {
 	int cont = 0;
 	NoLC *temp = NULL, *aux1 = NULL, *aux2 = NULL;
 	int ret = FRACASSO;
 
-	if (posLog <= 0)
+	if (posLog < 0)
 	{
-		printf("PosLog %i inexistente: PosLog <= 0 ou posLog > tamanho da lista \n", posLog);
+		printf("PosLog %i inexistente: PosLog < 0 ou posLog > tamanho da lista \n", posLog);
 		return ret;
 	}
-	if (p->inicio == NULL)
+	if (p->inicio == NULL && posLog == 0)
 	{
-		printf("A operação não insere em lista vazia \n");
-		return ret;
+		NoLC *temp = (NoLC *)malloc(sizeof(NoLC));
+		memcpy(&(temp->dados), novo, p->tamInfo);
+		temp->prox = NULL;
+
+		p->inicio = temp;
+		ret = SUCESSO;
 	}
+	// else if (p->inicio == NULL)
+	// {
+	// 	printf("A operação não insere em lista vazia \n");
+	// 	return ret;
+	// }
 	else
 	{
 		if (posLog == 1)
-			return (insereNovoPrimeiroC(novo, p));
+		{
+
+			NoLC *temp = (NoLC *)malloc(sizeof(NoLC));
+			memcpy(&(temp->dados), novo, p->tamInfo);
+			temp->prox = NULL;
+
+			p->inicio->prox = temp;
+			ret = SUCESSO;
+		}
 		else
 		{
 			aux1 = p->inicio;
@@ -120,7 +137,7 @@ int insereNaPoslogC(int posLog, Info *novo, DescLC *p)
 }
 
 /*************** Busca na poslog ***************/
-int buscaNaPoslogC(int posLog, Info *reg, DescLC *p)
+int buscaNaPoslogC(int posLog, InfoLC *reg, DescLC *p)
 {
 	int cont = 0;
 	NoLC *aux = NULL;
@@ -166,7 +183,7 @@ int buscaNaPoslogC(int posLog, Info *reg, DescLC *p)
 }
 
 /*************** Remove da poslog ***************/
-int removeDaPoslogC(int posLog, Info *reg, DescLC *p)
+int removeDaPoslogC(int posLog, InfoLC *reg, DescLC *p)
 {
 	int cont = 0;
 	NoLC *aux1 = NULL, *aux2 = NULL;
@@ -217,7 +234,7 @@ int removeDaPoslogC(int posLog, Info *reg, DescLC *p)
 }
 
 /*************** Remove o primeiro ***************/
-int removeOprimeiroC(Info *reg, DescLC *p)
+int removeOprimeiroC(InfoLC *reg, DescLC *p)
 {
 	NoLC *aux = NULL;
 	int ret = FRACASSO;
@@ -235,7 +252,7 @@ int removeOprimeiroC(Info *reg, DescLC *p)
 }
 
 /*************** Remove no final ***************/
-int removeOultimoC(Info *reg, DescLC *p)
+int removeOultimoC(InfoLC *reg, DescLC *p)
 {
 	int ret = FRACASSO;
 	NoLC *aux1 = p->inicio, *aux2 = NULL;
@@ -262,7 +279,7 @@ int removeOultimoC(Info *reg, DescLC *p)
 }
 
 /*************** Busca o primeiro ***************/
-int buscaOprimeiroC(Info *reg, DescLC *p)
+int buscaOprimeiroC(InfoLC *reg, DescLC *p)
 {
 	int ret = FRACASSO;
 
@@ -276,7 +293,7 @@ int buscaOprimeiroC(Info *reg, DescLC *p)
 }
 
 /*************** BUSCA No final ***************/
-int buscaOultimoC(Info *reg, DescLC *p)
+int buscaOultimoC(InfoLC *reg, DescLC *p)
 {
 	int ret = FRACASSO;
 	NoLC *aux1 = NULL;

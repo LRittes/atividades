@@ -17,11 +17,11 @@ struct DescListaPos *criaListPos(int tam)
 }
 
 /*************** insere novo primeiro ***************/
-int insereNovoPrimeiro(InfoList *reg, struct DescListaPos *p)
+int insereNovoPrimeiro(InfoLP *reg, struct DescListaPos *p)
 {
-	NoListaPos *temp;
+	NoLP *temp;
 	int ret = FRACASSO;
-	temp = (NoListaPos *)malloc(sizeof(NoListaPos));
+	temp = (NoLP *)malloc(sizeof(NoLP));
 
 	if (temp != NULL)
 	{
@@ -36,10 +36,10 @@ int insereNovoPrimeiro(InfoList *reg, struct DescListaPos *p)
 }
 
 /*************** insere novo ultimo ***************/
-int insereNovoUltimo(InfoList *reg, struct DescListaPos *p)
+int insereNovoUltimo(InfoLP *reg, struct DescListaPos *p)
 {
 	int ret = FRACASSO;
-	NoListaPos *aux = NULL, *temp = NULL;
+	NoLP *aux = NULL, *temp = NULL;
 
 	if (p->inicio == NULL)
 	{
@@ -51,7 +51,7 @@ int insereNovoUltimo(InfoList *reg, struct DescListaPos *p)
 		aux = p->inicio;
 		while (aux->prox != NULL)
 			aux = aux->prox;
-		temp = (NoListaPos *)malloc(sizeof(NoListaPos));
+		temp = (NoLP *)malloc(sizeof(NoLP));
 		if (temp != NULL)
 		{
 			memcpy(&(temp->dados), reg, p->tamInfo);
@@ -67,26 +67,38 @@ int insereNovoUltimo(InfoList *reg, struct DescListaPos *p)
 }
 
 /*************** INSERE NA posLog alvo ***************/
-int insereNaPoslog(int posLog, InfoList *novo, DescListaPos *p)
+int insereNaPoslog(int posLog, InfoLP *novo, DescListaPos *p)
 {
 	int cont = 0;
-	NoListaPos *temp = NULL, *aux1 = NULL, *aux2 = NULL;
+	NoLP *temp = NULL, *aux1 = NULL, *aux2 = NULL;
 	int ret = FRACASSO;
 
-	if (posLog <= 0)
+	if (posLog < 0)
 	{
 		printf("PosLog %i inexistente: PosLog <= 0 ou posLog > tamanho da lista \n", posLog);
 		return ret;
 	}
-	if (p->inicio == NULL)
+	if (p->inicio == NULL && posLog == 0)
 	{
-		printf("A operação não insere em lista vazia \n");
-		return ret;
+		NoLP *temp = (NoLP *)malloc(sizeof(NoLP));
+		memcpy(&(temp->dados), novo, p->tamInfo);
+		temp->prox = NULL;
+
+		p->inicio = temp;
+		ret = SUCESSO;
 	}
 	else
 	{
 		if (posLog == 1)
-			return (insereNovoPrimeiro(novo, p));
+		{
+
+			NoLP *temp = (NoLP *)malloc(sizeof(NoLP));
+			memcpy(&(temp->dados), novo, p->tamInfo);
+			temp->prox = NULL;
+
+			p->inicio->prox = temp;
+			ret = SUCESSO;
+		}
 		else
 		{
 			aux1 = p->inicio;
@@ -101,7 +113,7 @@ int insereNaPoslog(int posLog, InfoList *novo, DescListaPos *p)
 			if (aux2 != NULL && posLog == cont)
 			/*aux1 faz referência à posição posLog-1 e aux2 à posLog */
 			{
-				temp = (NoListaPos *)malloc(sizeof(NoListaPos));
+				temp = (NoLP *)malloc(sizeof(NoLP));
 				memcpy(&(temp->dados), novo, p->tamInfo);
 				temp->prox = NULL;
 				aux1->prox = temp;
@@ -120,10 +132,10 @@ int insereNaPoslog(int posLog, InfoList *novo, DescListaPos *p)
 }
 
 /*************** Busca na poslog ***************/
-int buscaNaPoslog(int posLog, InfoList *reg, DescListaPos *p)
+int buscaNaPoslog(int posLog, InfoLP *reg, DescListaPos *p)
 {
 	int cont = 0;
-	NoListaPos *aux = NULL;
+	NoLP *aux = NULL;
 	int ret = FRACASSO;
 
 	if (posLog <= 0)
@@ -166,10 +178,10 @@ int buscaNaPoslog(int posLog, InfoList *reg, DescListaPos *p)
 }
 
 /*************** Remove da poslog ***************/
-int removeDaPoslog(int posLog, InfoList *reg, DescListaPos *p)
+int removeDaPoslog(int posLog, InfoLP *reg, DescListaPos *p)
 {
 	int cont = 0;
-	NoListaPos *aux1 = NULL, *aux2 = NULL;
+	NoLP *aux1 = NULL, *aux2 = NULL;
 	int ret = FRACASSO;
 
 	if (posLog <= 0)
@@ -217,9 +229,9 @@ int removeDaPoslog(int posLog, InfoList *reg, DescListaPos *p)
 }
 
 /*************** Remove o primeiro ***************/
-int removeOprimeiro(InfoList *reg, DescListaPos *p)
+int removeOprimeiro(InfoLP *reg, DescListaPos *p)
 {
-	NoListaPos *aux = NULL;
+	NoLP *aux = NULL;
 	int ret = FRACASSO;
 
 	if (p->inicio)
@@ -235,10 +247,10 @@ int removeOprimeiro(InfoList *reg, DescListaPos *p)
 }
 
 /*************** Remove no final ***************/
-int removeOultimo(InfoList *reg, DescListaPos *p)
+int removeOultimo(InfoLP *reg, DescListaPos *p)
 {
 	int ret = FRACASSO;
-	NoListaPos *aux1 = p->inicio, *aux2 = NULL;
+	NoLP *aux1 = p->inicio, *aux2 = NULL;
 	if (p->inicio == NULL)
 		return ret;
 	if (aux1->prox == NULL)
@@ -262,7 +274,7 @@ int removeOultimo(InfoList *reg, DescListaPos *p)
 }
 
 /*************** Busca o primeiro ***************/
-int buscaOprimeiro(InfoList *reg, DescListaPos *p)
+int buscaOprimeiro(InfoLP *reg, DescListaPos *p)
 {
 	int ret = FRACASSO;
 
@@ -276,10 +288,10 @@ int buscaOprimeiro(InfoList *reg, DescListaPos *p)
 }
 
 /*************** BUSCA No final ***************/
-int buscaOultimo(InfoList *reg, struct DescListaPos *p)
+int buscaOultimo(InfoLP *reg, struct DescListaPos *p)
 {
 	int ret = FRACASSO;
-	NoListaPos *aux1 = NULL;
+	NoLP *aux1 = NULL;
 	if (p->inicio == NULL)
 		return ret;
 	aux1 = p->inicio;
@@ -311,7 +323,7 @@ int testaVazia(struct DescListaPos *p)
 int tamanhoDaLista(struct DescListaPos *p)
 {
 	int tam = 0;
-	NoListaPos *aux = p->inicio;
+	NoLP *aux = p->inicio;
 
 	while (aux != NULL)
 	{
@@ -325,7 +337,7 @@ int tamanhoDaLista(struct DescListaPos *p)
 /*************** PURGA ***************/
 int reinicia(DescListaPos *p)
 {
-	NoListaPos *aux;
+	NoLP *aux;
 
 	if (p->inicio != NULL)
 	{

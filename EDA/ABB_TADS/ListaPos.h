@@ -7,22 +7,22 @@
 #define SUCESSO 1
 #define FRACASSO 0
 
-typedef struct infoList
+typedef struct infoLP
 {
     int col;
     int lin;
-} InfoList;
+} InfoLP;
 
-typedef struct noListaPos
+typedef struct noLP
 {
-    InfoList dados;
-    struct noListaPos *prox;
-} NoListaPos;
+    InfoLP dados;
+    struct noLP *prox;
+} NoLP;
 
 typedef struct DescListaPos
 {
     int tamInfo;
-    NoListaPos *inicio;
+    NoLP *inicio;
 } DescListaPos;
 
 //======================APLICACAO=====================
@@ -33,17 +33,17 @@ int tamanhoDaLista(DescListaPos *p);
 int reinicia(DescListaPos *p);
 DescListaPos *destroi(DescListaPos *p);
 
-int insereNaPoslog(int posLog, InfoList *novo, DescListaPos *p);
-int insereNovoUltimo(InfoList *reg, DescListaPos *p);
-int insereNovoPrimeiro(InfoList *reg, DescListaPos *p);
+int insereNaPoslog(int posLog, InfoLP *novo, DescListaPos *p);
+int insereNovoUltimo(InfoLP *reg, DescListaPos *p);
+int insereNovoPrimeiro(InfoLP *reg, DescListaPos *p);
 
-int buscaOultimo(InfoList *reg, DescListaPos *p);
-int buscaOprimeiro(InfoList *reg, DescListaPos *p);
-int buscaNaPoslog(int posLog, InfoList *reg, DescListaPos *p);
+int buscaOultimo(InfoLP *reg, DescListaPos *p);
+int buscaOprimeiro(InfoLP *reg, DescListaPos *p);
+int buscaNaPoslog(int posLog, InfoLP *reg, DescListaPos *p);
 
-int removeDaPoslog(int Poslog, InfoList *reg, DescListaPos *p);
-int removeOultimo(InfoList *reg, DescListaPos *p);
-int removeOprimeiro(InfoList *reg, DescListaPos *p);
+int removeDaPoslog(int Poslog, InfoLP *reg, DescListaPos *p);
+int removeOultimo(InfoLP *reg, DescListaPos *p);
+int removeOprimeiro(InfoLP *reg, DescListaPos *p);
 
 int testaVazia(DescListaPos *p);
 int inverte(DescListaPos *p);

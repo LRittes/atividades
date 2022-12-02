@@ -66,10 +66,7 @@ int buscaABB(ABB *pa, InfoMain *destino, tipoChave chaveDeBusca)
 
 int insereABB(ABB *pa, InfoMain *novoReg)
 {
-    DescLC *listaColi = criaListaLC(sizeof(NoLC));
     NoABB *p, *q, *novoNoABB;
-
-    novoNoABB->dados.listColi = listaColi;
 
     p = q = pa->raiz;
 
@@ -77,6 +74,7 @@ int insereABB(ABB *pa, InfoMain *novoReg)
     {
         if (novoReg->identificador == (p->dados.identificador))
         {
+
             return FRACASSO; /* registro j� inserido previamente */
         }
         else
@@ -93,6 +91,7 @@ int insereABB(ABB *pa, InfoMain *novoReg)
     {
         if (novoNoABB != NULL)
         {
+
             memcpy(&(novoNoABB->dados), novoReg, pa->tamInfo);
             novoNoABB->dir = novoNoABB->esq = NULL; /* insere nova folha */
 
