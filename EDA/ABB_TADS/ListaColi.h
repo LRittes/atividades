@@ -7,10 +7,12 @@
 #define SUCESSO 1
 #define FRACASSO 0
 
+typedef char Word;
+
 typedef struct infoLC
 {
     DescListaPos *pos;
-    char str[50];
+    char *str;
 } InfoLC;
 
 typedef struct noLC

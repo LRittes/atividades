@@ -4,14 +4,14 @@
 #include "ListaPos.h"
 
 /*************** CRIA ***************/
-struct DescListaPos *criaListPos(int tam)
+DescListaPos *criaListPos()
 {
-	struct DescListaPos *desc = (struct DescListaPos *)malloc(sizeof(DescListaPos));
+	DescListaPos *desc = (DescListaPos *)malloc(sizeof(DescListaPos));
 
 	if (desc != NULL)
 	{
 		desc->inicio = NULL;
-		desc->tamInfo = tam;
+		desc->tamInfo = sizeof(InfoLP);
 	}
 	return desc;
 }

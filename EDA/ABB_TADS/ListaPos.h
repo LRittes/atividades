@@ -28,7 +28,7 @@ typedef struct DescListaPos
 //======================APLICACAO=====================
 
 //======================FILA=====================
-DescListaPos *criaListPos(int tamInfo);
+DescListaPos *criaListPos();
 int tamanhoDaLista(DescListaPos *p);
 int reinicia(DescListaPos *p);
 DescListaPos *destroi(DescListaPos *p);

@@ -1,70 +1,97 @@
 #include <stdio.h>
 #include "arq_interface.h"
 
+int sizeStrCustom(char str[]);
+
 int sizeStr(char str[]);
 
-void getChar(int *init, char txt[], char tmp[]);
+void getWord(int *init, char txt[], char tmp[]);
+
+int howManySpaceIn(char str[]);
+
+int calculateIntStr(char str[]);
+
+InfoLC *criaILC(char word[]);
 
 int main()
 {
-    char txt[50] = "aa bs cdr";
-    int init = 0;
-    char tmp[50];
-    getChar(&init, txt, tmp);
+    char txt[50] = "563 Ana 372484 6640.00 35 Quimica #";
 
-    printf("%s\n", tmp);
-
-    getChar(&init, txt, tmp);
-
-    printf("%s\n", tmp);
-
-    getChar(&init, txt, tmp);
-
-    printf("%s\n", tmp);
-
-    char *vetChars[] = {"aaa", "bbqb", "300"};
-    InfoMain vet[2] = {{sizeStr(vetChars[0]), criaListaLC(sizeof(NoLC))}, {sizeStr(vetChars[1]), criaListaLC(sizeof(NoLC))}};
+    int end = 0, time = howManySpaceIn(txt);
 
     ABB *arv = criaABB(sizeof(InfoMain));
-    insereABB(arv, &vet[0]);
 
-    DescLC *listaColi = criaListaLC(sizeof(NoLC));
-    DescListaPos *listaPos = criaListPos(sizeof(NoLP));
+    for (int i = 0; i <= time; i++)
+    {
+        char tmp[50];
 
-    arv->raiz->dados.listColi = listaColi;
+        getWord(&end, txt, tmp);
+        int t = calculateIntStr(tmp);
 
-    NoLC *noLC = (NoLC *)malloc(sizeof(NoLC));
+        // printf("%i\n", t);
 
-    InfoLC infoLc;
-    infoLc.pos = listaPos;
-    memcpy(&(infoLc.str), vetChars[0], sizeof(sizeof(char) * sizeStr(vetChars[0])));
+        InfoMain aux = {t, criaListaLC(sizeof(InfoLC))};
+        insereABB(arv, &aux);
 
-    InfoLC infoLc2;
-    infoLc2.pos = listaPos;
-    memcpy(&(infoLc2.str), vetChars[1], sizeof(sizeof(char) * sizeStr(vetChars[1])));
+        InfoMain *perc;
+        // buscaABB(arv, perc, t);
+        InfoLC auxLC = {criaListPos(), tmp};
+        insereNaPoslogC(tamanhoDaListaC((*perc).listColi), &auxLC, (*perc).listColi);
+        // printf("%s\n", arv->raiz->dados.listColi->inicio->dados.str);
+        // NoLP *no = (NoLP *)malloc(sizeof(NoLP));
 
-    insereNaPoslogC(0, &infoLc, arv->raiz->dados.listColi);
-    insereNaPoslogC(1, &infoLc2, arv->raiz->dados.listColi);
+        // infoLc.pos = criaListPos(sizeof(struct infoLP));
+        // memcpy(&(infoLc.str), tmp, sizeof(sizeof(char) * sizeStr(tmp)));
+        // InfoLC info = {, *tmp};
+        // memcpy(&(lista), info->pos, sizeof(InfoLC));
 
-    // arv->raiz->dados.listColi->inicio = noLC;
-    // arv->raiz->dados.listColi->inicio->dados = infoLc;
+        // infoLc.pos = criaListPos(sizeof(NoLP));
 
-    printf("%s\n", arv->raiz->dados.listColi->inicio->dados.str);
-    printf("%s\n", arv->raiz->dados.listColi->inicio->prox->dados.str);
+        // free(auxLC);
 
-    InfoLP dataLP;
-    dataLP.col = 0;
-    dataLP.lin = 1;
+        // printf("%i\n", (*perc).identificador);
+        // InfoLC *auxLC = (InfoLC *)malloc(sizeof(InfoLC));
+        // auxLC = (InfoLC *){criaListPos(sizeof(InfoLP)), tmp};
+        // insereNaPoslogC(0, &auxLC, (*perc).listColi);
 
-    InfoLP dataLP2;
-    dataLP2.col = 3;
-    dataLP2.lin = 4;
+        // printf("%i\n\n", (*perc).identificador);
+    }
 
-    insereNaPoslog(0, &dataLP, arv->raiz->dados.listColi->inicio->dados.pos);
-    insereNaPoslog(1, &dataLP2, arv->raiz->dados.listColi->inicio->dados.pos);
+    // char *vetChars[] = {"aaa", "bbqb", "300"};
+    // InfoMain vet[2] = {{sizeStr(vetChars[0]), criaListaLC(sizeof(NoLC))}, {sizeStr(vetChars[1]), criaListaLC(sizeof(NoLC))}};
 
-    printf("%i\n", arv->raiz->dados.listColi->inicio->dados.pos->inicio->prox->dados.col);
-    printf("%i\n", arv->raiz->dados.listColi->inicio->dados.pos->inicio->prox->dados.lin);
+    // arv->raiz->dados.listColi = listaColi;
+
+    // InfoLC infoLc;
+    // infoLc.pos = listaPos;
+    // memcpy(&(infoLc.str), vetChars[0], sizeof(sizeof(char) * sizeStr(vetChars[0])));
+
+    // InfoLC infoLc2;
+    // infoLc2.pos = listaPos;
+    // memcpy(&(infoLc2.str), vetChars[1], sizeof(sizeof(char) * sizeStr(vetChars[1])));
+
+    // insereNaPoslogC(0, &infoLc, arv->raiz->dados.listColi);
+    // insereNaPoslogC(1, &infoLc2, arv->raiz->dados.listColi);
+
+    // // arv->raiz->dados.listColi->inicio = noLC;
+    // // arv->raiz->dados.listColi->inicio->dados = infoLc;
+
+    // printf("%s\n", arv->raiz->dados.listColi->inicio->dados.str);
+    // printf("%s\n", arv->raiz->dados.listColi->inicio->prox->dados.str);
+
+    // InfoLP dataLP;
+    // dataLP.col = 0;
+    // dataLP.lin = 1;
+
+    // InfoLP dataLP2;
+    // dataLP2.col = 3;
+    // dataLP2.lin = 4;
+
+    // insereNaPoslog(0, &dataLP, arv->raiz->dados.listColi->inicio->dados.pos);
+    // insereNaPoslog(1, &dataLP2, arv->raiz->dados.listColi->inicio->dados.pos);
+
+    // printf("%i\n", arv->raiz->dados.listColi->inicio->dados.pos->inicio->prox->dados.col);
+    // printf("%i\n", arv->raiz->dados.listColi->inicio->dados.pos->inicio->prox->dados.lin);
 
     return 0;
 }
@@ -72,28 +99,63 @@ int main()
 int sizeStr(char str[])
 {
     int i;
-    for (i = 0; i < str[i] != '\0'; i++)
+    for (i = 0; str[i] != '\n'; i++)
         ;
     return i;
 }
 
-void getChar(int *init, char txt[], char tmp[])
+int sizeStrCustom(char str[])
 {
-    int initInt = (*init);
-    for (int i = (*init); txt[i] != '\0'; i++)
+    int i;
+    for (i = 0; i < str[i] != ' ' && str[i + 1] != '#'; i++)
+        ;
+    return i;
+}
+
+int howManySpaceIn(char str[])
+{
+    int res;
+    for (int i = 0; str[i] != '#'; i++)
     {
-        if (txt[i] == ' ')
+        if (str[i] == ' ' && str[i + 1] != '#')
+            res++;
+    }
+    return res;
+}
+
+void getWord(int *end, char txt[], char tmp[])
+{
+    int init = (*end);
+    for (int i = (*end); txt[i] != '#'; i++)
+    {
+        if (txt[i] == ' ' && txt[i + 1] != '#')
         {
-            (*init) = i + 1;
+            (*end) = i + 1;
             break;
         }
-        if (i == sizeStr(txt) - 1)
-            (*init) = i + 1;
+        else if (txt[i] == ' ' && txt[i + 1] == '#')
+            (*end) = i;
     }
-    for (int i = 0; i + initInt <= (*init); i++)
+    for (int i = 0; i + init < (*end); i++)
     {
-        tmp[i] = txt[i + initInt];
-        if (i == (*init) - initInt)
+        if (i + init == (*end) - 1)
+        {
             tmp[i] = '\0';
+        }
+        else
+        {
+            tmp[i] = txt[i + init];
+        }
     }
+}
+
+int calculateIntStr(char str[])
+
+{
+    int res = 0;
+    for (int i = 0; str[i] != '\0'; i++)
+    {
+        res += (i + 1) * (int)str[i];
+    }
+    return res;
 }
