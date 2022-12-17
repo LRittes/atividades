@@ -44,7 +44,7 @@ public class DB {
         int id = 0;
         int index = 0;
         for (Map<String, Object> userDB : db) {
-            if (userDB.get("email") == user.get("email") && userDB.get("password") == user.get("password")) {
+            if (userDB.get("email") == user.get("email") && userDB.get("userpassword") == user.get("userpassword")) {
                 id = index;
                 break;
             }
@@ -52,8 +52,8 @@ public class DB {
         }
         Map<String, Object> findedUser = db.get(id);
         findedUser.replace("email", user.get("email"));
-        findedUser.replace("password", user.get("password"));
-        findedUser.replace("name", user.get("name"));
+        findedUser.replace("userpassword", user.get("userpassword"));
+        findedUser.replace("username", user.get("username"));
         findedUser.replace("emails", user.get("emails"));
     }
 }

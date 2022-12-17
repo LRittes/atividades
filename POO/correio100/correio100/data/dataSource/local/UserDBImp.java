@@ -4,23 +4,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 import data.dataSource.interfaceDB.UserDB;
-// import data.dataSource.service.Service;
+import data.dataSource.service.PSQLServiceImp;
+import data.dataSource.service.Service;
 
 public class UserDBImp implements UserDB {
 
-    // private Service _service;
+    private Service _service;
 
     DB db = DB.I();
 
-    // public UserDBImp(Service service) {
-    // // this._service = service;
-    // }
+    public UserDBImp() {
+        this._service = new PSQLServiceImp();
+    }
 
     @Override
     public Map<String, Object> getUser(String email, String password) {
         Map<String, Object> user = new HashMap<>();
         for (Map<String, Object> u : db.getDB()) {
-            if (u.get("email").equals(email) && u.get("password").equals(password)) {
+            if (u.get("email").equals(email) && u.get("userpassword").equals(password)) {
                 user = u;
             }
         }

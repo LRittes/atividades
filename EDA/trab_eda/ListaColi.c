@@ -369,3 +369,42 @@ DescLC *destroiC(DescLC *p)
 	free(p);
 	return NULL; // aterra o ponteiro externo, declarado na aplicação
 }
+
+int searchWord(char str[], DescLC *list, InfoLC *destino)
+{
+	NoLC *aux = list->inicio;
+
+	while (aux != NULL)
+	{
+		if (compareStr(str, aux->dados.str) == 1)
+		{
+			// printf("%s %s\n", str, aux->dados.str);
+			copyTo(sizeof(InfoLC), destino, &(aux->dados));
+			return SUCESSO;
+		}
+		aux = aux->prox;
+	}
+	return FRACASSO;
+}
+
+void copyTo(int tamInfo, InfoLC *destino, InfoLC *fonte)
+{
+	memcpy(destino, fonte, tamInfo);
+}
+
+int compareStr(char str1[], char str2[])
+{
+	int n1, n2;
+	for (n1 = 0; str1[n1] != '\0'; n1++)
+		;
+	for (n2 = 0; str1[n2] != '\0'; n2++)
+		;
+	if (n1 != n2)
+		return 0;
+	for (int i = 0; i < n1; i++)
+	{
+		if (str1[i] != str2[i])
+			return 0;
+	}
+	return 1;
+}

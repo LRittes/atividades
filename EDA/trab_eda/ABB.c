@@ -74,7 +74,6 @@ int insereABB(ABB *pa, InfoMain *novoReg)
     {
         if (novoReg->identificador == (p->dados.identificador))
         {
-
             return FRACASSO; /* registro j� inserido previamente */
         }
         else
@@ -93,6 +92,7 @@ int insereABB(ABB *pa, InfoMain *novoReg)
         {
 
             memcpy(&(novoNoABB->dados), novoReg, pa->tamInfo);
+            novoNoABB->altura = 0;
             novoNoABB->dir = novoNoABB->esq = NULL; /* insere nova folha */
 
             if (q != NULL)
@@ -101,6 +101,11 @@ int insereABB(ABB *pa, InfoMain *novoReg)
                     q->esq = novoNoABB;
                 else
                     q->dir = novoNoABB;
+                // printf("inserir - antes altura\n");
+                q->altura = maior(alturaNo(q->esq), alturaNo(q->dir)) + 1;
+                // printf("inserir - antes balancear\n");
+
+                q = balancear(q);
             }
             else
                 pa->raiz = novoNoABB; /* �rvore com um �nico n� */
@@ -193,73 +198,6 @@ int numFolhas(ABB *p)
     return 0;
 }
 
-// int preOrdem(ABB *pa)
-// {
-//     if (pa->raiz == NULL)
-//     {
-//         return FRACASSO;
-//     }
-
-//     percorreEmPreOrdem(pa->raiz);
-
-//     return SUCESSO;
-// }
-
-// int posOrdem(ABB *pa)
-// {
-//     if (pa->raiz == NULL)
-//     {
-//         return FRACASSO;
-//     }
-
-//     percorreEmPosOrdem(pa->raiz);
-
-//     return SUCESSO;
-// }
-
-// int emOrdem(ABB *pa)
-// {
-//     if (pa->raiz == NULL)
-//     {
-
-//         return FRACASSO;
-//     }
-
-//     percorreEmOrdem(pa->raiz);
-
-//     return SUCESSO;
-// }
-
-// void percorreEmPreOrdem(NoABB *p)
-// {
-//     if (p != NULL)
-//     {
-//         processa(p->dados);
-//         percorreEmPreOrdem(p->esq);
-//         percorreEmPreOrdem(p->dir);
-//     }
-// }
-
-// void percorreEmOrdem(NoABB *p)
-// {
-//     if (p != NULL)
-//     {
-//         percorreEmOrdem(p->esq);
-//         processa(p->dados);
-//         percorreEmOrdem(p->dir);
-//     }
-// }
-
-// void percorreEmPosOrdem(NoABB *p)
-// {
-//     if (p != NULL)
-//     {
-//         percorreEmPosOrdem(p->esq);
-//         percorreEmPosOrdem(p->dir);
-//         processa(p->dados);
-//     }
-// }
-
 int calcNumFolhas(NoABB *p)
 {
     if (!p)
@@ -273,4 +211,120 @@ int calcNumFolhas(NoABB *p)
     }
 
     return calcNumFolhas(p->esq) + calcNumFolhas(p->dir);
+}
+
+int maior(int a, int b)
+{
+    // printf("maior\n");
+
+    return a > b ? a : b;
+}
+
+int alturaNo(NoABB *no)
+{
+    // printf("altura no - if\n");
+
+    if (no == NULL)
+        return -1;
+
+    else
+    {
+        // printf("altura no - depois else\n");
+
+        return no->altura;
+    }
+}
+
+int fatorBalanceamento(NoABB *no)
+{
+    // printf("fatorBalanceamento - if\n");
+
+    if (no)
+        return (no->esq - no->dir);
+    else
+    {
+        // printf("fatorBalanceamento - else\n");
+
+        return 0;
+    }
+}
+
+NoABB *rotaEsq(NoABB *no)
+{
+    printf("rotaEsq - inicio\n");
+    printf("Aqui");
+
+    NoABB *n1, *n2;
+
+    n1 = no->dir;
+    n2 = n1->esq;
+
+    n1->esq = no;
+    no->dir = n2;
+
+    no->altura = maior(alturaNo(no->esq), alturaNo(no->dir)) + 1;
+    n1->altura = maior(alturaNo(n1->esq), alturaNo(n1->dir)) + 1;
+
+    // printf("rotaEsq - fim\n");
+
+    return n1;
+}
+
+NoABB *rotaDir(NoABB *no)
+{
+    // printf("rotaDir - fim\n");
+
+    NoABB *n1, *n2;
+
+    n1 = no->esq;
+    n2 = n1->dir;
+
+    n1->dir = no;
+    no->esq = n2;
+
+    no->altura = maior(alturaNo(no->esq), alturaNo(no->dir)) + 1;
+    n1->altura = maior(alturaNo(n1->esq), alturaNo(n1->dir)) + 1;
+
+    // printf("rotaDir - inicio\n");
+
+    return n1;
+}
+
+NoABB *rotaDirEsq(NoABB *no)
+{
+    no->dir = rotaDir(no->dir);
+    return rotaEsq(no);
+}
+
+NoABB *rotaEsqDir(NoABB *no)
+{
+    no->esq = rotaEsq(no->esq);
+    return rotaDir(no);
+}
+
+NoABB *balancear(NoABB *no)
+{
+    // printf("balancear - inicio\n");
+
+    int fb = fatorBalanceamento(no);
+
+    // rotação esquerda
+    if (fb < -1 && fatorBalanceamento(no->dir) <= 0)
+        no = rotaEsq(no);
+
+    // rotação direita
+    else if (fb > 1 && fatorBalanceamento(no->esq) >= 0)
+        no = rotaDir(no);
+
+    // rotação esquerda direita
+    else if (fb > 1 && fatorBalanceamento(no->esq) < 0)
+        no = rotaEsqDir(no);
+
+    // rotação direita esquerda
+    else if (fb < -1 && fatorBalanceamento(no->dir) > 0)
+        no = rotaDirEsq(no);
+
+    // printf("balancear - fim\n");
+
+    return no;
 }

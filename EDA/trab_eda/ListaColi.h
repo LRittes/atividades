@@ -50,3 +50,7 @@ int removeOprimeiroC(InfoLC *reg, DescLC *p);
 int testaVaziaC(DescLC *p);
 int inverteC(DescLC *p);
 DescLC *destroiC(DescLC *p);
+
+int searchWord(char str[], DescLC *list, InfoLC *destino);
+void copyTo(int tamInfo, InfoLC *destino, InfoLC *fonte);
+int compareStr(char str1[], char str2[]);

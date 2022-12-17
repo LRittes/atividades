@@ -15,7 +15,7 @@ public class UserDTO {
         List<Email> list = new ArrayList<>();
         list = (List<Email>) FunctionsUtil.convertObjectToList(user.get("emails"));
 
-        User userRet = new User(user.get("name").toString(), user.get("password").toString(),
+        User userRet = new User(user.get("username").toString(), user.get("userpassword").toString(),
                 user.get("email").toString(),
                 list);
 
@@ -25,8 +25,8 @@ public class UserDTO {
     public static Map<String, Object> toJson(User user) {
         Map<String, Object> userMap = new HashMap<>();
 
-        userMap.put("name", user.getName());
-        userMap.put("password", user.getPassword());
+        userMap.put("username", user.getName());
+        userMap.put("userpassword", user.getPassword());
         userMap.put("email", user.getEmail());
         userMap.put("emails", user.getEmails());
 
